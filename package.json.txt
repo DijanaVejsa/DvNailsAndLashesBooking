@@ -1,0 +1,11 @@
+{
+  "name": "dv-lashes-booking",
+  "version": "1.0.0",
+  "description": "Wimpernstudio Terminplanung",
+  "scripts": {
+    "build": "echo 'Build erfolgreich'"
+  },
+  "dependencies": {
+    "firebase": "^10.7.0"
+  }
+}
