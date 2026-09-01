@@ -258,38 +258,40 @@
         let isAdmin = false;
         let lastBookedMessage = "";
 
-        // ✅ TERMINE AUS FIRESTORE LADEN
-                 async function loadSlots() {
-            try {
-                const snapshot = await db.collection("slots").get();
-                slots = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        /    // ✅ TERMINE AUS FIRESTORE LADEN & SAUBER NACH DATUM SORTIEREN
+    async function loadSlots() {
+        try {
+            const snapshot = await db.collection("slots").get();
+            slots = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-                // 1. Alle Einzeltermine exakt nach echten Datums- & Zeitwerten sortieren
-                slots.sort((a, b) => {
-                    const getTimeValue = (slot) => {
-                        if (!slot.dateStr) return 0;
+            // Nach echtem Datum und Uhrzeit sortieren
+            slots.sort((a, b) => {
+                const parseDate = (item) => {
+                    if (!item.dateStr) return new Date(0);
+                    // Entfernt Wochentage wie "Di, " und teilt 01.09.2026
+                    const cleanDate = item.dateStr.includes(",") ? item.dateStr.split(",")[1].trim() : item.dateStr;
+                    const [day, month, year] = cleanDate.split(".").map(Number);
+                    
+                    let hours = 0, minutes = 0;
+                    if (item.time) {
+                        const timeMatch = item.time.match(/(\d{1,2}):(\d{2})/);
+                        if (timeMatch) {
+                            hours = parseInt(timeMatch[1], 10);
+                            minutes = parseInt(timeMatch[2], 10);
+                        }
+                    }
+                    return new Date(year, month - 1, day, hours, minutes);
+                };
 
-                        // Datum zerlegen (z. B. "Do, 03.09.2026" -> Tag: 03, Monat: 09, Jahr: 2026)
-                        const parts = slot.dateStr.split('. ');
-                        const datePart = parts.length > 1 ? parts[1] : parts[0]; 
-                        const [day, month, year] = datePart.split('.');
+                return parseDate(a) - parseDate(b);
+            });
 
-                        // Uhrzeit zerlegen (z. B. "13:00 Uhr" -> Std: 13, Min: 00)
-                        const timeStr = (slot.time || "00:00").replace(' Uhr', '').trim();
-                        const [hours, minutes] = timeStr.split(':');
-
-                        return new Date(year, month - 1, day, hours || 0, minutes || 0).getTime();
-                    };
-
-                    return getTimeValue(a) - getTimeValue(b);
-                });
-
-                renderSlots();
-            } catch (error) {
-                console.error("Fehler beim Laden:", error);
-                showToast("Fehler beim Laden der Termine!");
-            }
+            renderSlots();
+        } catch (error) {
+            console.error("Fehler beim Laden:", error);
+            showToast("Fehler beim Laden der Termine");
         }
+    }
 
 
 
