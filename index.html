@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-                        <div id="admin-panel" class="hidden glass-card rounded-2xl p-5 shadow-xl border-2 border-nude-300 space-y-5">
+            <div id="admin-panel" class="hidden glass-card rounded-2xl p-5 shadow-xl border-2 border-nude-300 space-y-5">
                 <h2 class="font-bold text-nude-900 text-sm"><i class="fa-solid fa-sliders"></i> Admin-Bereich: Termine verwalten</h2>
 
                 <!-- OPTION 1: SCHNELLER WOCHEN-GENERATOR -->
@@ -111,6 +111,7 @@
                         <button type="button" onclick="generateFullWeek()" class="w-full bg-amber-600 text-white font-semibold py-2 rounded-lg text-xs hover:bg-amber-700">Ganze Woche freischalten (Mo–Fr)</button>
                     </div>
                 </div>
+
                 <!-- OPTION 3: SEPTEMBER IMPORT -->
                 <button type="button" onclick="importSeptemberSlots()" class="w-full bg-rose-600 text-white font-semibold py-2.5 rounded-xl text-xs hover:bg-rose-700">
                     🚀 Alle 19 September-Termine importieren
@@ -127,7 +128,6 @@
                     </form>
                 </div>
             </div>
-
 
             <div class="space-y-3.5" id="dates-container"></div>
         </div>
@@ -169,574 +169,429 @@
             </div>
         </div>
     </main>
-
     <!-- FOOTER & LEGAL -->
-    <footer class="max-w-md mx-auto mt-8 text-center text-[10px] text-nude-600 space-x-3">
-        <button onclick="openLegalModal('impressum')" class="hover:underline">Impressum</button>
-        <span>•</span>
-        <button onclick="openLegalModal('datenschutz')" class="hover:underline">Datenschutz</button>
-    </footer>
-
-    <!-- MODALS -->
-    <div id="booking-modal" class="fixed inset-0 bg-nude-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-nude-50 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative border border-nude-200">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-nude-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            <h3 class="serif-title text-2xl font-bold text-nude-900 mb-2">Termin anfragen</h3>
-            <p id="modal-slot-info" class="text-xs text-nude-600 font-semibold mb-4"></p>
-            <form id="booking-form" onsubmit="handleBooking(event)" class="space-y-3 text-xs">
-                <input type="hidden" id="booking-slot-id">
-                <input type="text" id="client-name" required placeholder="Dein Name" class="w-full p-3 rounded-xl border border-nude-200 bg-white">
-                <input type="email" id="client-email" required placeholder="E-Mail-Adresse" class="w-full p-3 rounded-xl border border-nude-200 bg-white">
-                <select id="client-treatment" class="w-full p-3 rounded-xl border border-nude-200 bg-white">
-                    <option>Wimpernverlängerung (50 €)</option>
-                    <option>Wimpern auffüllen (40 €)</option>
-                    <option>Augenbrauen zupfen (12 €)</option>
-                </select>
-                <input type="tel" id="client-phone" required placeholder="Telefonnummer" class="w-full p-3 rounded-xl border border-nude-200 bg-white">
-                <button type="submit" class="w-full bg-nude-800 text-amber-50 font-bold py-3 rounded-xl uppercase">Reservieren</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="success-modal" class="fixed inset-0 bg-nude-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-nude-50 w-full max-w-sm rounded-3xl p-6 shadow-2xl text-center space-y-3">
-            <h3 class="serif-title text-2xl font-bold text-nude-900">Erfolgreich reserviert!</h3>
-            <p class="text-xs text-nude-800 font-semibold">Adresse: Fehntjer Straße 2, 26529 Rechtsupweg</p>
-            <div class="bg-white p-3 rounded-xl text-[11px] text-left font-mono overflow-auto max-h-32"><p id="prepared-message-text"></p></div>
-            
-            <div class="space-y-2 pt-2">
-                <button onclick="sendViaInstagram()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-instagram"></i> Per Instagram senden
-                </button>
-                <button onclick="sendViaEmail()" class="w-full bg-nude-800 text-amber-50 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2">
-                    <i class="fa-regular fa-envelope"></i> Per E-Mail senden
-                </button>
-            </div>
-            
-            <button onclick="closeSuccessModal()" class="w-full text-nude-600 text-xs py-1">Schließen</button>
-        </div>
-    </div>
-
-    <div id="legal-modal" class="fixed inset-0 bg-nude-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-nude-50 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative border border-nude-200">
-            <button onclick="closeLegalModal()" class="absolute top-4 right-4 text-nude-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            <h3 id="legal-title" class="serif-title text-2xl font-bold text-nude-900 mb-3">Rechtliches</h3>
-            <div id="legal-content" class="text-xs text-nude-800 space-y-2 max-h-60 overflow-y-auto"></div>
-        </div>
-    </div>
-
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-nude-900 text-amber-50 px-5 py-3 rounded-full text-xs shadow-2xl opacity-0 pointer-events-none transition z-50">
-        <span id="toast-msg">Hinweis</span>
-    </div>
-
-    <!-- Firebase SDK (Version 9 Compatibility Mode) -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-    <script>
-                const firebaseConfig = {
-            apiKey: "AIzaSyAIlHWGTUybEwEPRC4mAPBPFNMr",
-            authDomain: "dvnailsandlashesbooking.firebaseapp.com",
-            projectId: "dvnailsandlashesbooking",
-            storageBucket: "dvnailsandlashesbooking.firebasestorage.app",
-            messagingSenderId: "604642327500",
-            appId: "1:604642327500:web:e4aed917344987",
-            measurementId: "G-PRM8D6LLQT"
-        };
-
-
-        // Firebase initialisieren
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        const OWNER_EMAIL = "DvNailsAndLashes@gmail.com";
-        const INSTAGRAM_PROFILE_URL = "https://www.instagram.com/dv_nailsandlashes?igsi=MXQxOXJyMWlhZ3Q4OA==";
-        const FACEBOOK_PROFILE_URL = "https://www.facebook.com/share/1BtQLH8L9r/?mibextid=wwXIfr";
-        const ADMIN_PIN = "9357";
-
-        let slots = [];
-        let isAdmin = false;
-        let lastBookedMessage = "";
-
-        // ✅ TERMINE AUS FIRESTORE LADEN & SORTIEREN
-        async function loadSlots() {
-            try {
-                const snapshot = await db.collection("slots").get();
-                slots = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-                slots.sort((a, b) => {
-                    const parseDate = (item) => {
-                        if (!item.dateStr) return new Date(0);
-                        const cleanDate = item.dateStr.includes(",") ? item.dateStr.split(",")[1].trim() : item.dateStr;
-                        const [day, month, year] = cleanDate.split(".").map(Number);
-                        
-                        let hours = 0, minutes = 0;
-                        if (item.time) {
-                            const timeMatch = item.time.match(/(\d{1,2}):(\d{2})/);
-                            if (timeMatch) {
-                                hours = parseInt(timeMatch[1], 10);
-                                minutes = parseInt(timeMatch[2], 10);
-                            }
-                        }
-                        return new Date(year, month - 1, day, hours, minutes);
-                    };
-
-                    return parseDate(a) - parseDate(b);
-                });
-
-                renderSlots();
-            } catch (error) {
-                console.error("Fehler beim Laden:", error);
-                showToast("Fehler beim Laden der Termine");
-            }
-        }
-           }
-                    }
-                    return new Date(year, month - 1, day, hours, minutes);
-                };
-
-                return parseDate(a) - parseDate(b);
-            });
-
-            renderSlots();
-        } catch (error) {
-            console.error("Fehler beim Laden:", error);
-            showToast("Fehler beim Laden der Termine");
-        }
-    }
-
-
-
-        // ✅ TERMIN SPEICHERN
-        async function saveSlot(slot) {
-            try {
-                if (slot.id && slot.id.length > 10) {
-                    await db.collection("slots").doc(slot.id).update(slot);
-                } else {
-                    const docRef = await db.collection("slots").add(slot);
-                    slot.id = docRef.id;
-                }
-                loadSlots();
-            } catch (error) {
-                console.error("Fehler beim Speichern:", error);
-                showToast("Fehler beim Speichern");
-            }
-        }
-
-        // ✅ TERMIN LÖSCHEN
-        async function deleteSlot(id) {
-            try {
-                await db.collection("slots").doc(id).delete();
-                loadSlots();
-            } catch (error) {
-                console.error("Fehler beim Löschen:", error);
-            }
-        }
-
-        // ✅ STORNIEREN
-        async function cancelBooking(id) {
-            if (confirm("Möchtest du diese Buchung stornieren?")) {
-                const slot = slots.find(s => s.id === id);
-                if (slot) {
-                    slot.booked = false;
-                    slot.client = null;
-                    await saveSlot(slot);
-                    showToast('Buchung storniert.');
-                }
-            }
-        }
-
-        // ✅ BOOKING SPEICHERN
-        async function handleBooking(e) {
-            e.preventDefault();
-            const id = document.getElementById('booking-slot-id').value;
-            const name = document.getElementById('client-name').value;
-            const email = document.getElementById('client-email').value;
-            const treatment = document.getElementById('client-treatment').value;
-            const phone = document.getElementById('client-phone').value;
-
-            const slot = slots.find(s => s.id === id);
-            if (slot) {
-                slot.booked = true;
-                slot.client = { name, email, treatment, phone };
-                
-                await saveSlot(slot);
-                closeModal();
-                
-                lastBookedMessage = `Hallo Dijana! ✨\n\nIch habe folgenden Termin bei dir gebucht:\n\n📅 Datum: ${slot.dateStr}\n⏰ Uhrzeit: ${slot.time}\n👁️ Behandlung: ${treatment}\n👤 Name: ${name}\n📧 E-Mail: ${email}\n📞 Telefonnummer: ${phone}\n\nAdresse: Fehntjer Straße 2, 26529 Rechtsupweg\n\nBitte bestätige mir den Termin. Vielen Dank! ❤️`;
-
-                document.getElementById('prepared-message-text').innerText = lastBookedMessage;
-                document.getElementById('success-modal').classList.remove('hidden');
-            }
-        }
-
-        // ✅ 1. MANUELLE / MEHRFACH-EINGABE
-        async function handleAddSlot(e) {
-            e.preventDefault();
-            const dateStr = document.getElementById('slot-date-str').value.trim();
-            const timesInput = document.getElementById('slot-time').value;
-            const note = document.getElementById('slot-note').value;
-
-            const times = timesInput.split(',').map(t => t.trim()).filter(t => t.length > 0);
-            if (times.length === 0) return;
-
-            try {
-                for (const time of times) {
-                    await db.collection("slots").add({
-                        dateStr,
-                        time,
-                        note,
-                        booked: false,
-                        client: null
-                    });
-                }
-                document.getElementById('add-slot-form').reset();
-                document.getElementById('slot-note').value = 'Wimpern';
-                loadSlots();
-                showToast(`${times.length} Termin(e) freigeschaltet!`);
-            } catch (error) {
-                console.error("Fehler beim Erstellen:", error);
-                showToast("Fehler beim Speichern!");
-            }
-        }
-
-        // ✅ 2. AUTOMATISCHER WOCHEN-GENERATOR (Mo-Fr)
-        async function generateFullWeek() {
-            const startDateInput = document.getElementById('gen-start-date').value;
-            const timesInput = document.getElementById('gen-times').value;
-            const note = document.getElementById('gen-note').value;
-
-            if (!startDateInput) {
-                showToast("Bitte ein Startdatum wählen!");
-                return;
-            }
-
-            const times = timesInput.split(',').map(t => t.trim()).filter(t => t.length > 0);
-            if (times.length === 0) return;
-
-            const startDate = new Date(startDateInput);
-            let createdCount = 0;
-
-            showToast("Erstelle Woche...");
-
-            try {
-                for (let i = 0; i < 5; i++) {
-                    const currentDate = new Date(startDate);
-                    currentDate.setDate(startDate.getDate() + i);
-
-                    const dateStr = currentDate.toLocaleDateString('de-DE', {
-                        weekday: 'short',
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                    });
-
-                    for (const time of times) {
-                        await db.collection("slots").add({
-                            dateStr,
-                            time,
-                            note,
-                            booked: false,
-                            client: null
-                        });
-                        createdCount++;
-                    }
-                }
-
-                loadSlots();
-                showToast(`${createdCount} Termine für die ganze Woche erstellt!`);
-            } catch (error) {
-                console.error("Fehler beim Erstellen der Woche:", error);
-                showToast("Fehler beim Erstellen!");
-            }
-        }
-        // ✅ AUTOMATISCHER IMPORT FÜR DIE 19 SEPTEMBER-TERMINE
-        async function importSeptemberSlots() {
-            const septemberSlots = [
-                { dateStr: "Di, 01.09.2026", time: "20:00 Uhr" },
-                { dateStr: "Mi, 02.09.2026", time: "15:00 Uhr" },
-                { dateStr: "Mi, 02.09.2026", time: "20:00 Uhr" },
-                { dateStr: "Do, 03.09.2026", time: "15:00 Uhr" },
-                { dateStr: "Do, 03.09.2026", time: "20:00 Uhr" },
-                { dateStr: "Fr, 04.09.2026", time: "15:00 Uhr" },
-                { dateStr: "Fr, 04.09.2026", time: "20:00 Uhr" },
-                { dateStr: "Sa, 05.09.2026", time: "09:00 Uhr" },
-                { dateStr: "Sa, 05.09.2026", time: "13:00 Uhr" },
-                { dateStr: "Mo, 07.09.2026", time: "15:00 Uhr" },
-                { dateStr: "Mo, 07.09.2026", time: "20:00 Uhr" },
-                { dateStr: "Di, 08.09.2026", time: "15:00 Uhr" },
-                { dateStr: "Di, 08.09.2026", time: "20:00 Uhr" },
-                { dateStr: "Do, 10.09.2026", time: "15:00 Uhr" },
-                { dateStr: "Do, 10.09.2026", time: "20:00 Uhr" },
-                { dateStr: "Fr, 11.09.2026", time: "15:00 Uhr" },
-                { dateStr: "Fr, 11.09.2026", time: "20:00 Uhr" },
-                { dateStr: "Sa, 12.09.2026", time: "09:00 Uhr" },
-                { dateStr: "Sa, 12.09.2026", time: "13:00 Uhr" }
-            ];
-
-            showToast("Importiere 19 Termine...");
-
-            try {
-                for (const slot of septemberSlots) {
-                    await db.collection("slots").add({
-                        dateStr: slot.dateStr,
-                        time: slot.time,
-                        note: "Wimpern / Nägel",
-                        booked: false,
-                        client: null
-                    });
-                }
-                loadSlots();
-                showToast("Alle 19 Termine wurden erfolgreich importiert!");
-            } catch (error) {
-                console.error("Fehler beim Importieren:", error);
-                showToast("Fehler beim Importieren!");
-            }
-        }
-
-
-        // ✅ BEIM ÖFFNEN LADEN
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSlots();
-            db.collection("slots").onSnapshot(() => {
-                loadSlots();
-            });
-        });
-
-        // ✅ ADMIN-MODUS
-        function promptAdmin() {
-            const pin = prompt("Admin-PIN:");
-            if (pin === ADMIN_PIN) {
-                isAdmin = true;
-                document.getElementById('admin-panel').classList.remove('hidden');
-                document.getElementById('admin-status-bar').classList.remove('hidden');
-                document.getElementById('admin-status-bar').classList.add('flex');
-                showToast("Admin-Modus aktiviert!");
-                renderSlots();
-            } else if (pin !== null) {
-                alert("Falscher PIN!");
-            }
-        }
-
-        function exitAdminMode() {
-            isAdmin = false;
-            document.getElementById('admin-panel').classList.add('hidden');
-            document.getElementById('admin-status-bar').classList.add('hidden');
-            renderSlots();
-        }
-
-        function switchTab(tabName) {
-            const tabs = ['booking', 'prices', 'aftercare', 'faq'];
-            tabs.forEach(t => {
-                const content = document.getElementById(`tab-content-${t}`);
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if (t === tabName) {
-                    content.classList.remove('hidden');
-                    btn.className = "py-2.5 rounded-xl bg-nude-800 text-amber-50 shadow-sm transition";
-                } else {
-                    content.classList.add('hidden');
-                    btn.className = "py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition";
-                }
-            });
-        }
-
-        function toggleInstructions() {
-            const box = document.getElementById('instruction-box');
-            const arrow = document.getElementById('instruction-arrow');
-            box.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-        }
-
-        function openLegalModal(type) {
-            const modal = document.getElementById('legal-modal');
-            const title = document.getElementById('legal-title');
-            const content = document.getElementById('legal-content');
-
-            if (type === 'impressum') {
-                title.innerText = "Impressum";
-                content.innerHTML = `
-                    <p><strong>Angaben gemäß § 5 DDG:</strong></p>
-                    <p>Dijana Vejsa<br>Fehntjer Straße 2<br>26529 Rechtsupweg</p>
-                    <p><strong>Kontakt:</strong><br>E-Mail: ${OWNER_EMAIL}</p>
-                `;
-            } else if (type === 'datenschutz') {
-                title.innerText = "Datenschutzerklärung";
-                content.innerHTML = `
-                    <p><strong>1. Datenschutz auf einen Blick</strong></p>
-                    <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert.</p>
-                    <p><strong>2. Datenerfassung</strong></p>
-                    <p>Eingegebene Daten werden ausschließlich zur Terminabsprache genutzt und nicht an Dritte weitergegeben.</p>
-                `;
-            }
-            modal.classList.remove('hidden');
-        }
-
-        function closeLegalModal() {
-            document.getElementById('legal-modal').classList.add('hidden');
-        }
-
-        let logoClickCount = 0;
-        function handleLogoClick() {
-            logoClickCount++;
-            setTimeout(() => { logoClickCount = 0; }, 1000);
-            if (logoClickCount >= 3) {
-                logoClickCount = 0;
-                promptAdmin();
-            }
-        }
-
-        function renderSlots() {
-            const container = document.getElementById('dates-container');
-            container.innerHTML = '';
-
-            const grouped = {};
-            slots.forEach(slot => {
-                if (!grouped[slot.dateStr]) {
-                    grouped[slot.dateStr] = [];
-                }
-                grouped[slot.dateStr].push(slot);
-            });
-
-            const dateKeys = Object.keys(grouped);
-
-            if (dateKeys.length === 0) {
-                container.innerHTML = `
-                    <div class="glass-card rounded-2xl p-6 text-center text-nude-600 shadow-sm">
-                        <i class="fa-regular fa-calendar-xmark text-2xl mb-2"></i>
-                        <p class="text-xs font-semibold">Aktuell sind keine freien Termine eingetragen.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            dateKeys.forEach(dateStr => {
-                const daySlots = grouped[dateStr];
-                const dateCard = document.createElement('div');
-                dateCard.className = "glass-card rounded-2xl p-4 shadow-sm border border-nude-200/80";
-
-                const freeCount = daySlots.filter(s => !s.booked).length;
-
-                let slotsHTML = daySlots.map(slot => {
-                    if (slot.booked) {
-                        return `
-                            <div class="bg-amber-50/90 p-3 rounded-xl border border-amber-200/80 shadow-sm space-y-1.5">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs font-bold text-nude-400 line-through">${slot.time}</span>
-                                        <span class="text-[10px] bg-rose-200 text-rose-900 px-2 py-0.5 rounded-md font-bold">Gebucht ✨</span>
-                                    </div>
-                                    ${isAdmin ? `<button onclick="cancelBooking('${slot.id}')" class="text-[10px] text-red-600 hover:underline font-bold">Stornieren</button>` : ''}
-                                </div>
-                                ${isAdmin && slot.client ? `
-                                    <div class="bg-white/90 p-2.5 rounded-lg border border-nude-200 text-[11px] text-nude-900 space-y-0.5">
-                                        <p><strong>Name:</strong> ${slot.client.name}</p>
-                                        <p><strong>Telefon:</strong> <a href="tel:${slot.client.phone}" class="text-blue-600">${slot.client.phone}</a></p>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        `;
-                    } else {
-                        return `
-                            <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-nude-200 shadow-sm">
-                                <div class="flex items-center gap-2.5">
-                                    <div class="w-8 h-8 rounded-lg bg-nude-100 text-nude-900 flex items-center justify-center font-bold text-xs">
-                                        <i class="fa-regular fa-clock text-nude-600"></i>
-                                    </div>
-                                    <div>
-                                        <span class="text-sm font-bold text-nude-900 block">${slot.time}</span>
-                                        <span class="text-[10px] text-emerald-600 font-bold">✓ Frei</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    ${isAdmin ? `
-                                        <button onclick="deleteSlot('${slot.id}')" class="text-red-400 hover:text-red-600 p-2 text-xs">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    ` : `
-                                        <button onclick="openBookingModal('${slot.id}')" class="bg-nude-800 hover:bg-nude-900 text-amber-50 text-xs font-bold px-4 py-2 rounded-xl">
-                                            Buchen
-                                        </button>
-                                    `}
-                                </div>
-                            </div>
-                        `;
-                    }
-                }).join('');
-
-                dateCard.innerHTML = `
-                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-nude-200/80">
-                        <h3 class="font-bold text-nude-900 text-xs flex items-center gap-2">
-                            <i class="fa-regular fa-calendar-days text-nude-600 text-sm"></i> ${dateStr}
-                        </h3>
-                        <span class="text-[10px] bg-nude-200 text-nude-900 px-2.5 py-0.5 rounded-full font-bold">${freeCount} frei</span>
-                    </div>
-                    <div class="space-y-2">
-                        ${slotsHTML}
-                    </div>
-                `;
-
-                container.appendChild(dateCard);
-            });
-        }
-
-        function openBookingModal(id) {
-            const slot = slots.find(s => s.id === id);
-            if (!slot) return;
-
-            document.getElementById('booking-slot-id').value = slot.id;
-            document.getElementById('modal-slot-info').innerText = `${slot.dateStr} – ${slot.time}`;
-            document.getElementById('booking-modal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('booking-modal').classList.add('hidden');
-            document.getElementById('booking-form').reset();
-        }
-
-        function copyMessageText() {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(lastBookedMessage);
-            } else {
-                const tempInput = document.createElement("textarea");
-                tempInput.value = lastBookedMessage;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand("copy");
-                document.body.removeChild(tempInput);
-            }
-            showToast("Text kopiert! 📋");
-        }
-
-        function sendViaEmail() {
-            copyMessageText();
-            const subject = encodeURIComponent("Terminbuchung");
-            const body = encodeURIComponent(lastBookedMessage);
-            window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
-        }
-
-        function sendViaInstagram() {
-            copyMessageText();
-            window.location.href = INSTAGRAM_PROFILE_URL;
-        }
-
-        function sendViaFacebook() {
-            copyMessageText();
-            window.location.href = FACEBOOK_PROFILE_URL;
-        }
-
-        function closeSuccessModal() {
-            document.getElementById('success-modal').classList.add('hidden');
-            showToast('Termin reserviert!');
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 3000);
-        }
-    </script>
+<footer class="max-w-md mx-auto mt-8 text-center text-[10px] text-nude-600 space-x-3">
+<button onclick="openLegalModal('impressum')" class="hover:underline">Impressum</button>
+<span>•</span>
+<button onclick="openLegalModal('datenschutz')" class="hover:underline">Datenschutz</button>
+</footer>
+<!-- MODALS -->
+<div id="booking-modal" class="fixed inset-0 bg-nude-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+<div class="bg-nude-50 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative border border-nude-200">
+<button onclick="closeModal()" class="absolute top-4 right-4 text-nude-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+<h3 class="serif-title text-2xl font-bold text-nude-900 mb-2">Termin anfragen</h3>
+<p id="modal-slot-info" class="text-xs text-nude-600 font-semibold mb-4"></p>
+<form id="booking-form" onsubmit="handleBooking(event)" class="space-y-3 text-xs">
+<input type="hidden" id="booking-slot-id">
+<input type="text" id="client-name" required placeholder="Dein Name" class="w-full p-3 rounded-xl border border-nude-200 bg-white">
+<input type="email" id="client-email" required placeholder="E-Mail-Adresse" class="w-full p-3 rounded-xl border border-nude-200 bg-white">
+<select id="client-treatment" class="w-full p-3 rounded-xl border border-nude-200 bg-white">
+<option>Wimpernverlängerung (50 €)</option>
+<option>Wimpern auffüllen (40 €)</option>
+<option>Augenbrauen zupfen (12 €)</option>
+</select>
+<input type="tel" id="client-phone" required placeholder="Telefonnummer" class="w-full p-3 rounded-xl border border-nude-200 bg-white">
+<button type="submit" class="w-full bg-nude-800 text-amber-50 font-bold py-3 rounded-xl uppercase">Reservieren</button>
+</form>
+</div>
+</div>
+<div id="success-modal" class="fixed inset-0 bg-nude-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+<div class="bg-nude-50 w-full max-w-sm rounded-3xl p-6 shadow-2xl text-center space-y-3">
+<h3 class="serif-title text-2xl font-bold text-nude-900">Erfolgreich reserviert!</h3>
+<p class="text-xs text-nude-800 font-semibold">Adresse: Fehntjer Straße 2, 26529 Rechtsupweg</p>
+<div class="bg-white p-3 rounded-xl text-[11px] text-left font-mono overflow-auto max-h-32"><p id="prepared-message-text"></p></div>
+<div class="space-y-2 pt-2">
+<button onclick="sendViaInstagram()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2">
+<i class="fa-brands fa-instagram"></i> Per Instagram senden
+</button>
+<button onclick="sendViaEmail()" class="w-full bg-nude-800 text-amber-50 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2">
+<i class="fa-regular fa-envelope"></i> Per E-Mail senden
+</button>
+</div>
+<button onclick="closeSuccessModal()" class="w-full text-nude-600 text-xs py-1">Schließen</button>
+</div>
+</div>
+<div id="legal-modal" class="fixed inset-0 bg-nude-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+<div class="bg-nude-50 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative border border-nude-200">
+<button onclick="closeLegalModal()" class="absolute top-4 right-4 text-nude-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+<h3 id="legal-title" class="serif-title text-2xl font-bold text-nude-900 mb-3">Rechtliches</h3>
+<div id="legal-content" class="text-xs text-nude-800 space-y-2 max-h-60 overflow-y-auto"></div>
+</div>
+</div>
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-nude-900 text-amber-50 px-5 py-3 rounded-full text-xs shadow-2xl opacity-0 pointer-events-none transition z-50">
+<span id="toast-msg">Hinweis</span>
+</div>
+<!-- Firebase SDK (Version 9 Compatibility Mode) -->
+<script src="[https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js](https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js)"></script>
+<script src="[https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js](https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js)"></script>
+<script>
+const firebaseConfig = {
+apiKey: "AIzaSyAIlHWGTUybEwEPRC4mAPBPFNMr",
+authDomain: "dvnailsandlashesbooking.firebaseapp.com",
+projectId: "dvnailsandlashesbooking",
+storageBucket: "dvnailsandlashesbooking.firebasestorage.app",
+messagingSenderId: "604642327500",
+appId: "1:604642327500:web:e4aed917344987",
+measurementId: "G-PRM8D6LLQT"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const OWNER_EMAIL = "DvNailsAndLashes@gmail.com";
+const INSTAGRAM_PROFILE_URL = "https://www.instagram.com/dv_nailsandlashes?igsi=MXQxOXJyMWlhZ3Q4OA==";
+const FACEBOOK_PROFILE_URL = "https://www.facebook.com/share/1BtQLH8L9r/?mibextid=wwXIfr";
+const ADMIN_PIN = "9357";
+let slots = [];
+let isAdmin = false;
+let lastBookedMessage = "";
+async function loadSlots() {
+try {
+const snapshot = await db.collection("slots").get();
+slots = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+slots.sort((a, b) => {
+const parseDate = (item) => {
+if (!item.dateStr) return new Date(0);
+const cleanDate = item.dateStr.includes(",") ? item.dateStr.split(",")[1].trim() : item.dateStr;
+const [day, month, year] = cleanDate.split(".").map(Number);
+let hours = 0, minutes = 0;
+if (item.time) {
+const timeMatch = item.time.match(/(\d{1,2}):(\d{2})/);
+if (timeMatch) {
+hours = parseInt(timeMatch[1], 10);
+minutes = parseInt(timeMatch[2], 10);
+}
+}
+return new Date(year, month - 1, day, hours, minutes);
+};
+return parseDate(a) - parseDate(b);
+});
+renderSlots();
+} catch (error) {
+console.error("Fehler beim Laden:", error);
+showToast("Fehler beim Laden der Termine");
+}
+}
+async function saveSlot(slot) {
+try {
+if (slot.id && slot.id.length > 10) {
+await db.collection("slots").doc(slot.id).update(slot);
+} else {
+const docRef = await db.collection("slots").add(slot);
+slot.id = docRef.id;
+}
+loadSlots();
+} catch (error) {
+console.error("Fehler beim Speichern:", error);
+showToast("Fehler beim Speichern");
+}
+}
+async function deleteSlot(id) {
+try {
+await db.collection("slots").doc(id).delete();
+loadSlots();
+} catch (error) {
+console.error("Fehler beim Löschen:", error);
+}
+}
+async function cancelBooking(id) {
+if (confirm("Möchtest du diese Buchung stornieren?")) {
+const slot = slots.find(s => s.id === id);
+if (slot) {
+slot.booked = false;
+slot.client = null;
+await saveSlot(slot);
+showToast('Buchung storniert.');
+}
+}
+}
+async function handleBooking(e) {
+e.preventDefault();
+const id = document.getElementById('booking-slot-id').value;
+const name = document.getElementById('client-name').value;
+const email = document.getElementById('client-email').value;
+const treatment = document.getElementById('client-treatment').value;
+const phone = document.getElementById('client-phone').value;
+const slot = slots.find(s => s.id === id);
+if (slot) {
+slot.booked = true;
+slot.client = { name, email, treatment, phone };
+await saveSlot(slot);
+closeModal();
+lastBookedMessage = ⁠Hallo Dijana! ✨\n\nIch habe folgenden Termin bei dir gebucht:\n\n📅 Datum: ${slot.dateStr}\n⏰ Uhrzeit: ${slot.time}\n👁️ Behandlung: ${treatment}\n👤 Name: ${name}\n📧 E-Mail: ${email}\n📞 Telefonnummer: ${phone}\n\nAdresse: Fehntjer Straße 2, 26529 Rechtsupweg\n\nBitte bestätige mir den Termin. Vielen Dank! ❤️⁠;
+document.getElementById('prepared-message-text').innerText = lastBookedMessage;
+document.getElementById('success-modal').classList.remove('hidden');
+}
+}
+async function handleAddSlot(e) {
+e.preventDefault();
+const dateStr = document.getElementById('slot-date-str').value.trim();
+const timesInput = document.getElementById('slot-time').value;
+const note = document.getElementById('slot-note').value;
+const times = timesInput.split(',').map(t => t.trim()).filter(t => t.length > 0);
+if (times.length === 0) return;
+try {
+for (const time of times) {
+await db.collection("slots").add({
+dateStr,
+time,
+note,
+booked: false,
+client: null
+});
+}
+document.getElementById('add-slot-form').reset();
+document.getElementById('slot-note').value = 'Wimpern';
+loadSlots();
+showToast(⁠${times.length} Termin(e) freigeschaltet!⁠);
+} catch (error) {
+console.error("Fehler beim Erstellen:", error);
+showToast("Fehler beim Speichern!");
+}
+}
+async function generateFullWeek() {
+const startDateInput = document.getElementById('gen-start-date').value;
+const timesInput = document.getElementById('gen-times').value;
+const note = document.getElementById('gen-note').value;
+if (!startDateInput) {
+showToast("Bitte ein Startdatum wählen!");
+return;
+}
+const times = timesInput.split(',').map(t => t.trim()).filter(t => t.length > 0);
+if (times.length === 0) return;
+const startDate = new Date(startDateInput);
+let createdCount = 0;
+showToast("Erstelle Woche...");
+try {
+for (let i = 0; i < 5; i++) {
+const currentDate = new Date(startDate);
+currentDate.setDate(startDate.getDate() + i);
+const dateStr = currentDate.toLocaleDateString('de-DE', {
+weekday: 'short',
+day: '2-digit',
+month: '2-digit',
+year: 'numeric'
+});
+for (const time of times) {
+await db.collection("slots").add({
+dateStr,
+time,
+note,
+booked: false,
+client: null
+});
+createdCount++;
+}
+}
+loadSlots();
+showToast(⁠${createdCount} Termine für die ganze Woche erstellt!⁠);
+} catch (error) {
+console.error("Fehler beim Erstellen der Woche:", error);
+showToast("Fehler beim Erstellen!");
+}
+}
+async function importSeptemberSlots() {
+const septemberSlots = [
+{ dateStr: "Di, 01.09.2026", time: "20:00 Uhr" },
+{ dateStr: "Mi, 02.09.2026", time: "15:00 Uhr" },
+{ dateStr: "Mi, 02.09.2026", time: "20:00 Uhr" },
+{ dateStr: "Do, 03.09.2026", time: "15:00 Uhr" },
+{ dateStr: "Do, 03.09.2026", time: "20:00 Uhr" },
+{ dateStr: "Fr, 04.09.2026", time: "15:00 Uhr" },
+{ dateStr: "Fr, 04.09.2026", time: "20:00 Uhr" },
+{ dateStr: "Sa, 05.09.2026", time: "09:00 Uhr" },
+{ dateStr: "Sa, 05.09.2026", time: "13:00 Uhr" },
+{ dateStr: "Mo, 07.09.2026", time: "15:00 Uhr" },
+{ dateStr: "Mo, 07.09.2026", time: "20:00 Uhr" },
+{ dateStr: "Di, 08.09.2026", time: "15:00 Uhr" },
+{ dateStr: "Di, 08.09.2026", time: "20:00 Uhr" },
+{ dateStr: "Do, 10.09.2026", time: "15:00 Uhr" },
+{ dateStr: "Do, 10.09.2026", time: "20:00 Uhr" },
+{ dateStr: "Fr, 11.09.2026", time: "15:00 Uhr" },
+{ dateStr: "Fr, 11.09.2026", time: "20:00 Uhr" },
+{ dateStr: "Sa, 12.09.2026", time: "09:00 Uhr" },
+{ dateStr: "Sa, 12.09.2026", time: "13:00 Uhr" }
+];
+showToast("Importiere 19 Termine...");
+try {
+for (const slot of septemberSlots) {
+await db.collection("slots").add({
+dateStr: slot.dateStr,
+time: slot.time,
+note: "Wimpern / Nägel",
+booked: false,
+client: null
+});
+}
+loadSlots();
+showToast("Alle 19 Termine wurden erfolgreich importiert!");
+} catch (error) {
+console.error("Fehler beim Importieren:", error);
+showToast("Fehler beim Importieren!");
+}
+}
+document.addEventListener('DOMContentLoaded', () => {
+loadSlots();
+db.collection("slots").onSnapshot(() => {
+loadSlots();
+});
+});
+function promptAdmin() {
+const pin = prompt("Admin-PIN:");
+if (pin === ADMIN_PIN) {
+isAdmin = true;
+document.getElementById('admin-panel').classList.remove('hidden');
+document.getElementById('admin-status-bar').classList.remove('hidden');
+document.getElementById('admin-status-bar').classList.add('flex');
+showToast("Admin-Modus aktiviert!");
+renderSlots();
+} else if (pin !== null) {
+alert("Falscher PIN!");
+}
+}
+function exitAdminMode() {
+isAdmin = false;
+document.getElementById('admin-panel').classList.add('hidden');
+document.getElementById('admin-status-bar').classList.add('hidden');
+renderSlots();
+}
+function switchTab(tabName) {
+const tabs = ['booking', 'prices', 'aftercare', 'faq'];
+tabs.forEach(t => {
+const content = document.getElementById(⁠tab-content-${t}⁠);
+const btn = document.getElementById(⁠tab-btn-${t}⁠);
+if (t === tabName) {
+content.classList.remove('hidden');
+btn.className = "py-2.5 rounded-xl bg-nude-800 text-amber-50 shadow-sm transition";
+} else {
+content.classList.add('hidden');
+btn.className = "py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition";
+}
+});
+}
+function toggleInstructions() {
+const box = document.getElementById('instruction-box');
+const arrow = document.getElementById('instruction-arrow');
+box.classList.toggle('hidden');
+arrow.classList.toggle('rotate-180');
+}
+function openLegalModal(type) {
+const modal = document.getElementById('legal-modal');
+const title = document.getElementById('legal-title');
+const content = document.getElementById('legal-content');
+if (type === 'impressum') {
+title.innerText = "Impressum";
+content.innerHTML = ⁠<p><strong>Angaben gemäß § 5 DDG:</strong></p> <p>Dijana Vejsa<br>Fehntjer Straße 2<br>26529 Rechtsupweg</p> <p><strong>Kontakt:</strong><br>E-Mail: ${OWNER_EMAIL}</p>⁠;
+} else if (type === 'datenschutz') {
+title.innerText = "Datenschutzerklärung";
+content.innerHTML = ⁠<p><strong>1. Datenschutz auf einen Blick</strong></p> <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert.</p> <p><strong>2. Datenerfassung</strong></p> <p>Eingegebene Daten werden ausschließlich zur Terminabsprache genutzt und nicht an Dritte weitergegeben.</p>⁠;
+}
+modal.classList.remove('hidden');
+}
+function closeLegalModal() {
+document.getElementById('legal-modal').classList.add('hidden');
+}
+let logoClickCount = 0;
+function handleLogoClick() {
+logoClickCount++;
+setTimeout(() => { logoClickCount = 0; }, 1000);
+if (logoClickCount >= 3) {
+logoClickCount = 0;
+promptAdmin();
+}
+}
+function renderSlots() {
+const container = document.getElementById('dates-container');
+container.innerHTML = '';
+const grouped = {};
+slots.forEach(slot => {
+if (!grouped[slot.dateStr]) {
+grouped[slot.dateStr] = [];
+}
+grouped[slot.dateStr].push(slot);
+});
+const dateKeys = Object.keys(grouped);
+if (dateKeys.length === 0) {
+container.innerHTML = ⁠<div class="glass-card rounded-2xl p-6 text-center text-nude-600 shadow-sm"> <i class="fa-regular fa-calendar-xmark text-2xl mb-2"></i> <p class="text-xs font-semibold">Aktuell sind keine freien Termine eingetragen.</p> </div>⁠;
+return;
+}
+dateKeys.forEach(dateStr => {
+const daySlots = grouped[dateStr];
+const dateCard = document.createElement('div');
+dateCard.className = "glass-card rounded-2xl p-4 shadow-sm border border-nude-200/80";
+const freeCount = daySlots.filter(s => !s.booked).length;
+let slotsHTML = daySlots.map(slot => {
+if (slot.booked) {
+return ⁠<div class="bg-amber-50/90 p-3 rounded-xl border border-amber-200/80 shadow-sm space-y-1.5"> <div class="flex items-center justify-between"> <div class="flex items-center gap-2"> <span class="text-xs font-bold text-nude-400 line-through">${slot.time}</span> <span class="text-[10px] bg-rose-200 text-rose-900 px-2 py-0.5 rounded-md font-bold">Gebucht ✨</span> </div> ${isAdmin ?⁠<button onclick="cancelBooking('${slot.id}')" class="text-[10px] text-red-600 hover:underline font-bold">Stornieren</button>⁠: ''} </div> ${isAdmin && slot.client ?⁠
+<div class="bg-white/90 p-2.5 rounded-lg border border-nude-200 text-[11px] text-nude-900 space-y-0.5">
+<p><strong>Name:</strong> {slot.client.name}</p>
+<p><strong>Telefon:</strong> <a href="tel:${slot.client.phone}" class="text-blue-600">{slot.client.phone}</a></p>
+</div>
+⁠: ''} </div>⁠;
+} else {
+return ⁠<div class="flex items-center justify-between bg-white p-3 rounded-xl border border-nude-200 shadow-sm"> <div class="flex items-center gap-2.5"> <div class="w-8 h-8 rounded-lg bg-nude-100 text-nude-900 flex items-center justify-center font-bold text-xs"> <i class="fa-regular fa-clock text-nude-600"></i> </div> <div> <span class="text-sm font-bold text-nude-900 block">${slot.time}</span> <span class="text-[10px] text-emerald-600 font-bold">✓ Frei</span> </div> </div> <div> ${isAdmin ?⁠
+<button onclick="deleteSlot('${slot.id}')" class="text-red-400 hover:text-red-600 p-2 text-xs">
+<i class="fa-solid fa-trash"></i>
+</button>
+⁠:⁠
+<button onclick="openBookingModal('${slot.id}')" class="bg-nude-800 hover:bg-nude-900 text-amber-50 text-xs font-bold px-4 py-2 rounded-xl">
+Buchen
+</button>
+⁠} </div> </div> ⁠;
+}
+}).join('');
+dateCard.innerHTML = ⁠<div class="flex justify-between items-center mb-3 pb-2 border-b border-nude-200/80"> <h3 class="font-bold text-nude-900 text-xs flex items-center gap-2"> <i class="fa-regular fa-calendar-days text-nude-600 text-sm"></i> ${dateStr} </h3> <span class="text-[10px] bg-nude-200 text-nude-900 px-2.5 py-0.5 rounded-full font-bold">${freeCount} frei</span> </div> <div class="space-y-2"> ${slotsHTML} </div>⁠;
+container.appendChild(dateCard);
+});
+}
+function openBookingModal(id) {
+const slot = slots.find(s => s.id === id);
+if (!slot) return;
+document.getElementById('booking-slot-id').value = slot.id;
+document.getElementById('modal-slot-info').innerText = ⁠${slot.dateStr} – ${slot.time}⁠;
+document.getElementById('booking-modal').classList.remove('hidden');
+}
+function closeModal() {
+document.getElementById('booking-modal').classList.add('hidden');
+document.getElementById('booking-form').reset();
+}
+function copyMessageText() {
+if (navigator.clipboard) {
+navigator.clipboard.writeText(lastBookedMessage);
+} else {
+const tempInput = document.createElement("textarea");
+tempInput.value = lastBookedMessage;
+document.body.appendChild(tempInput);
+tempInput.select();
+document.execCommand("copy");
+document.body.removeChild(tempInput);
+}
+showToast("Text kopiert! 📋");
+}
+function sendViaEmail() {
+copyMessageText();
+const subject = encodeURIComponent("Terminbuchung");
+const body = encodeURIComponent(lastBookedMessage);
+window.location.href = ⁠mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}⁠;
+}
+function sendViaInstagram() {
+copyMessageText();
+window.location.href = INSTAGRAM_PROFILE_URL;
+}
+function sendViaFacebook() {
+copyMessageText();
+window.location.href = FACEBOOK_PROFILE_URL;
+}
+function closeSuccessModal() {
+document.getElementById('success-modal').classList.add('hidden');
+showToast('Termin reserviert!');
+}
+function showToast(msg) {
+const toast = document.getElementById('toast');
+document.getElementById('toast-msg').innerText = msg;
+toast.classList.remove('opacity-0', 'pointer-events-none');
+setTimeout(() => {
+toast.classList.add('opacity-0', 'pointer-events-none');
+}, 3000);
+}
+</script>
 </body>
 </html>
