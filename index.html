@@ -98,17 +98,32 @@
                 </div>
             </div>
 
-            <div id="admin-panel" class="hidden glass-card rounded-2xl p-5 shadow-xl border-2 border-nude-300">
-                <h2 class="font-bold text-nude-900 text-sm mb-3"><i class="fa-solid fa-sliders"></i> Termine verwalten</h2>
-                <form id="add-slot-form" onsubmit="handleAddSlot(event)" class="space-y-3">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="slot-date-str" required placeholder="Di, 15.09.2026" class="text-xs p-2.5 rounded-xl border border-nude-200 bg-white">
-                        <input type="text" id="slot-time" required placeholder="14:00 Uhr" class="text-xs p-2.5 rounded-xl border border-nude-200 bg-white">
+                        <div id="admin-panel" class="hidden glass-card rounded-2xl p-5 shadow-xl border-2 border-nude-300 space-y-5">
+                <h2 class="font-bold text-nude-900 text-sm"><i class="fa-solid fa-sliders"></i> Admin-Bereich: Termine verwalten</h2>
+
+                <!-- OPTION 1: SCHNELLER WOCHEN-GENERATOR -->
+                <div class="bg-white/80 p-3 rounded-xl border border-nude-200">
+                    <h3 class="font-semibold text-xs text-nude-800 mb-2">⚡ 1-Klick Wochen-Generator</h3>
+                    <div class="space-y-2">
+                        <input type="date" id="gen-start-date" class="w-full text-xs p-2 rounded-lg border border-nude-200">
+                        <input type="text" id="gen-times" value="10:00 Uhr, 13:00 Uhr, 16:00 Uhr" class="w-full text-xs p-2 rounded-lg border border-nude-200" placeholder="Zeiten (mit Komma getrennt)">
+                        <input type="text" id="gen-note" value="Wimpern / Nägel" class="w-full text-xs p-2 rounded-lg border border-nude-200">
+                        <button type="button" onclick="generateFullWeek()" class="w-full bg-amber-600 text-white font-semibold py-2 rounded-lg text-xs hover:bg-amber-700">Ganze Woche freischalten (Mo–Fr)</button>
                     </div>
-                    <input type="text" id="slot-note" value="Wimpern" class="w-full text-xs p-2.5 rounded-xl border border-nude-200 bg-white">
-                    <button type="submit" class="w-full bg-nude-800 text-amber-50 font-semibold py-2.5 rounded-xl text-xs">Termin freischalten</button>
-                </form>
+                </div>
+
+                <!-- OPTION 2: MANUELLE / MEHRFACH-EINGABE -->
+                <div class="bg-white/80 p-3 rounded-xl border border-nude-200">
+                    <h3 class="font-semibold text-xs text-nude-800 mb-2">✏️ Einzeltag oder Mehrfach-Zeiten</h3>
+                    <form id="add-slot-form" onsubmit="handleAddSlot(event)" class="space-y-2">
+                        <input type="text" id="slot-date-str" required placeholder="z. B. Di, 15.09.2026" class="w-full text-xs p-2 rounded-lg border border-nude-200">
+                        <input type="text" id="slot-time" required placeholder="z. B. 10:00 Uhr, 14:00 Uhr" class="w-full text-xs p-2 rounded-lg border border-nude-200">
+                        <input type="text" id="slot-note" value="Wimpern" class="w-full text-xs p-2 rounded-lg border border-nude-200">
+                        <button type="submit" class="w-full bg-nude-800 text-amber-50 font-semibold py-2 rounded-lg text-xs">Termin(e) speichern</button>
+                    </form>
+                </div>
             </div>
+
 
             <div class="space-y-3.5" id="dates-container"></div>
         </div>
@@ -314,26 +329,87 @@
             }
         }
 
-        // ✅ NEUER TERMIN HINZUFÜGEN (ADMIN)
+        // ✅ 1. MANUELLE / MEHRFACH-EINGABE
         async function handleAddSlot(e) {
             e.preventDefault();
-            const dateStr = document.getElementById('slot-date-str').value;
-            const time = document.getElementById('slot-time').value;
+            const dateStr = document.getElementById('slot-date-str').value.trim();
+            const timesInput = document.getElementById('slot-time').value;
             const note = document.getElementById('slot-note').value;
 
-            const newSlot = {
-                dateStr,
-                time,
-                note,
-                booked: false,
-                client: null
-            };
+            const times = timesInput.split(',').map(t => t.trim()).filter(t => t.length > 0);
+            if (times.length === 0) return;
 
-            await saveSlot(newSlot);
-            document.getElementById('add-slot-form').reset();
-            document.getElementById('slot-note').value = 'Wimpern';
-            showToast('Neuer Termin freigeschaltet!');
+            try {
+                for (const time of times) {
+                    await db.collection("slots").add({
+                        dateStr,
+                        time,
+                        note,
+                        booked: false,
+                        client: null
+                    });
+                }
+                document.getElementById('add-slot-form').reset();
+                document.getElementById('slot-note').value = 'Wimpern';
+                loadSlots();
+                showToast(`${times.length} Termin(e) freigeschaltet!`);
+            } catch (error) {
+                console.error("Fehler beim Erstellen:", error);
+                showToast("Fehler beim Speichern!");
+            }
         }
+
+        // ✅ 2. AUTOMATISCHER WOCHEN-GENERATOR (Mo-Fr)
+        async function generateFullWeek() {
+            const startDateInput = document.getElementById('gen-start-date').value;
+            const timesInput = document.getElementById('gen-times').value;
+            const note = document.getElementById('gen-note').value;
+
+            if (!startDateInput) {
+                showToast("Bitte ein Startdatum wählen!");
+                return;
+            }
+
+            const times = timesInput.split(',').map(t => t.trim()).filter(t => t.length > 0);
+            if (times.length === 0) return;
+
+            const startDate = new Date(startDateInput);
+            let createdCount = 0;
+
+            showToast("Erstelle Woche...");
+
+            try {
+                for (let i = 0; i < 5; i++) {
+                    const currentDate = new Date(startDate);
+                    currentDate.setDate(startDate.getDate() + i);
+
+                    const dateStr = currentDate.toLocaleDateString('de-DE', {
+                        weekday: 'short',
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+
+                    for (const time of times) {
+                        await db.collection("slots").add({
+                            dateStr,
+                            time,
+                            note,
+                            booked: false,
+                            client: null
+                        });
+                        createdCount++;
+                    }
+                }
+
+                loadSlots();
+                showToast(`${createdCount} Termine für die ganze Woche erstellt!`);
+            } catch (error) {
+                console.error("Fehler beim Erstellen der Woche:", error);
+                showToast("Fehler beim Erstellen!");
+            }
+        }
+
 
         // ✅ BEIM ÖFFNEN LADEN
         document.addEventListener('DOMContentLoaded', () => {
