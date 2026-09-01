@@ -255,25 +255,29 @@
         let lastBookedMessage = "";
 
         // ✅ TERMINE AUS FIRESTORE LADEN
-           async function loadSlots() {
+                 async function loadSlots() {
             try {
                 const snapshot = await db.collection("slots").get();
                 slots = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-                // Sortiert die Termine nach Datum und Uhrzeit
+                // 1. Alle Einzeltermine exakt nach echten Datums- & Zeitwerten sortieren
                 slots.sort((a, b) => {
-                    const parseDate = (slot) => {
-                        if (!slot.dateStr) return new Date(0);
-                        const parts = slot.dateStr.split(', ');
-                        const datePart = parts[1] || parts[0];
+                    const getTimeValue = (slot) => {
+                        if (!slot.dateStr) return 0;
+
+                        // Datum zerlegen (z. B. "Do, 03.09.2026" -> Tag: 03, Monat: 09, Jahr: 2026)
+                        const parts = slot.dateStr.split('. ');
+                        const datePart = parts.length > 1 ? parts[1] : parts[0]; 
                         const [day, month, year] = datePart.split('.');
-                        const timePart = (slot.time || "00:00").replace(' Uhr', '').trim();
-                        const [hours, minutes] = timePart.split(':');
-                        
-                        return new Date(year, month - 1, day, hours || 0, minutes || 0);
+
+                        // Uhrzeit zerlegen (z. B. "13:00 Uhr" -> Std: 13, Min: 00)
+                        const timeStr = (slot.time || "00:00").replace(' Uhr', '').trim();
+                        const [hours, minutes] = timeStr.split(':');
+
+                        return new Date(year, month - 1, day, hours || 0, minutes || 0).getTime();
                     };
 
-                    return parseDate(a) - parseDate(b);
+                    return getTimeValue(a) - getTimeValue(b);
                 });
 
                 renderSlots();
@@ -282,6 +286,7 @@
                 showToast("Fehler beim Laden der Termine!");
             }
         }
+
 
 
         // ✅ TERMIN SPEICHERN
