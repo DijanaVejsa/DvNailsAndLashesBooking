@@ -111,6 +111,10 @@
                         <button type="button" onclick="generateFullWeek()" class="w-full bg-amber-600 text-white font-semibold py-2 rounded-lg text-xs hover:bg-amber-700">Ganze Woche freischalten (Mo–Fr)</button>
                     </div>
                 </div>
+                <!-- OPTION 3: SEPTEMBER IMPORT -->
+                <button type="button" onclick="importSeptemberSlots()" class="w-full bg-rose-600 text-white font-semibold py-2.5 rounded-xl text-xs hover:bg-rose-700">
+                    🚀 Alle 19 September-Termine importieren
+                </button>
 
                 <!-- OPTION 2: MANUELLE / MEHRFACH-EINGABE -->
                 <div class="bg-white/80 p-3 rounded-xl border border-nude-200">
@@ -430,6 +434,49 @@
             } catch (error) {
                 console.error("Fehler beim Erstellen der Woche:", error);
                 showToast("Fehler beim Erstellen!");
+            }
+        }
+        // ✅ AUTOMATISCHER IMPORT FÜR DIE 19 SEPTEMBER-TERMINE
+        async function importSeptemberSlots() {
+            const septemberSlots = [
+                { dateStr: "Di, 01.09.2026", time: "20:00 Uhr" },
+                { dateStr: "Mi, 02.09.2026", time: "15:00 Uhr" },
+                { dateStr: "Mi, 02.09.2026", time: "20:00 Uhr" },
+                { dateStr: "Do, 03.09.2026", time: "15:00 Uhr" },
+                { dateStr: "Do, 03.09.2026", time: "20:00 Uhr" },
+                { dateStr: "Fr, 04.09.2026", time: "15:00 Uhr" },
+                { dateStr: "Fr, 04.09.2026", time: "20:00 Uhr" },
+                { dateStr: "Sa, 05.09.2026", time: "09:00 Uhr" },
+                { dateStr: "Sa, 05.09.2026", time: "13:00 Uhr" },
+                { dateStr: "Mo, 07.09.2026", time: "15:00 Uhr" },
+                { dateStr: "Mo, 07.09.2026", time: "20:00 Uhr" },
+                { dateStr: "Di, 08.09.2026", time: "15:00 Uhr" },
+                { dateStr: "Di, 08.09.2026", time: "20:00 Uhr" },
+                { dateStr: "Do, 10.09.2026", time: "15:00 Uhr" },
+                { dateStr: "Do, 10.09.2026", time: "20:00 Uhr" },
+                { dateStr: "Fr, 11.09.2026", time: "15:00 Uhr" },
+                { dateStr: "Fr, 11.09.2026", time: "20:00 Uhr" },
+                { dateStr: "Sa, 12.09.2026", time: "09:00 Uhr" },
+                { dateStr: "Sa, 12.09.2026", time: "13:00 Uhr" }
+            ];
+
+            showToast("Importiere 19 Termine...");
+
+            try {
+                for (const slot of septemberSlots) {
+                    await db.collection("slots").add({
+                        dateStr: slot.dateStr,
+                        time: slot.time,
+                        note: "Wimpern / Nägel",
+                        booked: false,
+                        client: null
+                    });
+                }
+                loadSlots();
+                showToast("Alle 19 Termine wurden erfolgreich importiert!");
+            } catch (error) {
+                console.error("Fehler beim Importieren:", error);
+                showToast("Fehler beim Importieren!");
             }
         }
 
