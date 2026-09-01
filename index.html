@@ -255,34 +255,16 @@
         let lastBookedMessage = "";
 
         // ✅ TERMINE AUS FIRESTORE LADEN
-           async function loadSlots() {
+        async function loadSlots() {
             try {
                 const snapshot = await db.collection("slots").get();
                 slots = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-                // Sortiert die Termine nach Datum und Uhrzeit
-                slots.sort((a, b) => {
-                    const parseDate = (slot) => {
-                        if (!slot.dateStr) return new Date(0);
-                        const parts = slot.dateStr.split(', ');
-                        const datePart = parts[1] || parts[0];
-                        const [day, month, year] = datePart.split('.');
-                        const timePart = (slot.time || "00:00").replace(' Uhr', '').trim();
-                        const [hours, minutes] = timePart.split(':');
-                        
-                        return new Date(year, month - 1, day, hours || 0, minutes || 0);
-                    };
-
-                    return parseDate(a) - parseDate(b);
-                });
-
                 renderSlots();
             } catch (error) {
                 console.error("Fehler beim Laden:", error);
-                showToast("Fehler beim Laden der Termine!");
+                showToast("Fehler beim Laden der Termine");
             }
         }
-
 
         // ✅ TERMIN SPEICHERN
         async function saveSlot(slot) {
