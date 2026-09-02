@@ -79,7 +79,7 @@
             <i class="fa-solid fa-location-dot text-nude-600"></i> Homestudio • Rechtsupweg
         </p>
         
-        <!-- NAVIGATION TABS (Aus Dijana_Vejsa_Wimpernstudio1) -->
+        <!-- NAVIGATION TABS -->
         <div class="grid grid-cols-4 gap-1.5 glass-card p-1.5 rounded-2xl mb-6 shadow-md border border-nude-200 text-[11px] font-bold">
             <button id="tab-btn-booking" onclick="switchTab('booking')" class="py-2.5 rounded-xl bg-nude-800 text-amber-50 shadow-sm transition">
                 <i class="fa-regular fa-calendar-check block text-sm mb-0.5"></i> Termine
@@ -149,7 +149,7 @@
                 </div>
             </div>
 
-            <!-- ADMIN-BEREICH (Aus index.html.txt mit Wochen-Generator & Mehrfacheingabe) -->
+            <!-- ADMIN-BEREICH -->
             <div id="admin-panel" class="hidden glass-card rounded-2xl p-5 shadow-xl border-2 border-nude-300 space-y-5">
                 <div class="flex justify-between items-center pb-2 border-b border-nude-200">
                     <h2 class="font-bold text-nude-900 flex items-center gap-2 text-sm">
@@ -185,10 +185,10 @@
                 </div>
             </div>
 
-            <!-- TERMINSLOTS LISTE (FIRESTORE LIVE-DATEN) -->
+            <!-- TERMINSLOTS LISTE (SORTIERT & NUR AKTUELLE/ZUKÜNFTIGE) -->
             <div class="space-y-3.5" id="dates-container"></div>
 
-            <!-- SOCIAL MEDIA & INSPIRATION BANNER (Aus Dijana_Vejsa_Wimpernstudio1) -->
+            <!-- SOCIAL MEDIA & INSPIRATION BANNER -->
             <div class="mt-8 space-y-3 pt-2">
                 <div class="glass-card rounded-2xl p-4 text-center border border-nude-200 shadow-md space-y-1">
                     <p class="text-xs font-bold text-nude-900">✨ Lass dich inspirieren!</p>
@@ -263,7 +263,7 @@
             </div>
         </div>
 
-        <!-- ================= TAB 3: WIMPERN-PFLEGE (AFTERCARE GRID) ================= -->
+        <!-- ================= TAB 3: WIMPERN-PFLEGE ================= -->
         <div id="tab-content-aftercare" class="hidden space-y-4">
             <div class="glass-card rounded-2xl p-5 shadow-sm border border-nude-200/60">
                 <div class="text-center mb-4">
@@ -311,7 +311,7 @@
             </div>
         </div>
 
-        <!-- ================= TAB 4: INFO & FAQ (MIT AKKORDEON) ================= -->
+        <!-- ================= TAB 4: INFO & FAQ ================= -->
         <div id="tab-content-faq" class="hidden space-y-4">
             
             <!-- Studio Regeln -->
@@ -366,7 +366,7 @@
         </footer>
     </main>
 
-    <!-- BUCHUNGS-MODAL (Pop-up) -->
+    <!-- BUCHUNGS-MODAL -->
     <div id="booking-modal" class="fixed inset-0 bg-nude-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-nude-50 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative border border-nude-200 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-nude-600 hover:text-nude-900">
@@ -460,7 +460,7 @@
         <span id="toast-msg">Hinweis</span>
     </div>
 
-    <!-- Firebase SDK (Version 9 Compatibility Mode aus index.html.txt) -->
+    <!-- Firebase SDK (Version 9 Compatibility Mode) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -714,22 +714,60 @@
             arrow.classList.toggle('rotate-180');
         }
 
-        // ✅ RENDER SLOTS LISTE
+        // ✅ HELFER-FUNKTION: DATUMS-PARSER (z. B. "Di, 15.09.2026" -> Date-Objekt)
+        function parseGermanDateStr(dateStr) {
+            if (!dateStr) return new Date(0);
+            // Sucht nach Musters wie DD.MM.YYYY
+            const match = dateStr.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+            if (match) {
+                const day = parseInt(match[1], 10);
+                const month = parseInt(match[2], 10) - 1; // 0-basiert
+                const year = parseInt(match[3], 10);
+                return new Date(year, month, day);
+            }
+            return new Date(dateStr);
+        }
+
+        // ✅ HELFER-FUNKTION: ZEIT-PARSER (z. B. "14:00 Uhr" -> Minuten seit Mitternacht)
+        function parseTimeToMinutes(timeStr) {
+            if (!timeStr) return 0;
+            const match = timeStr.match(/(\d{1,2}):(\d{2})/);
+            if (match) {
+                return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
+            }
+            return 0;
+        }
+
+        // ✅ RENDER SLOTS LISTE (SORTIERT & VERGANGENE OUT-GEFILTERT)
         function renderSlots() {
             const container = document.getElementById('dates-container');
             container.innerHTML = '';
 
+            // Heutiges Datum ohne Uhrzeit (Mitternacht)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // 1. Vergangene Termine filtern
+            const validSlots = slots.filter(slot => {
+                const slotDate = parseGermanDateStr(slot.dateStr);
+                return slotDate >= today;
+            });
+
+            // 2. Nach Datum gruppieren
             const grouped = {};
-            slots.forEach(slot => {
+            validSlots.forEach(slot => {
                 if (!grouped[slot.dateStr]) {
                     grouped[slot.dateStr] = [];
                 }
                 grouped[slot.dateStr].push(slot);
             });
 
-            const dateKeys = Object.keys(grouped);
+            // 3. Datums-Schlüssel chronologisch sortieren
+            const sortedDateKeys = Object.keys(grouped).sort((a, b) => {
+                return parseGermanDateStr(a) - parseGermanDateStr(b);
+            });
 
-            if (dateKeys.length === 0) {
+            if (sortedDateKeys.length === 0) {
                 container.innerHTML = `
                     <div class="glass-card rounded-2xl p-6 text-center text-nude-600 shadow-sm">
                         <i class="fa-regular fa-calendar-xmark text-2xl mb-2"></i>
@@ -739,8 +777,12 @@
                 return;
             }
 
-            dateKeys.forEach(dateStr => {
+            sortedDateKeys.forEach(dateStr => {
                 const daySlots = grouped[dateStr];
+
+                // Uhrzeiten innerhalb des Tages aufsteigend sortieren
+                daySlots.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
+
                 const dateCard = document.createElement('div');
                 dateCard.className = "glass-card rounded-2xl p-4 shadow-sm border border-nude-200/80";
 
