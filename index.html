@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dijana Vejsa | Wimpernstylistin</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -20,14 +17,8 @@
                     },
                     colors: {
                         nude: {
-                            50: '#fdf8f5',
-                            100: '#f7ebe3',
-                            200: '#edd8cb',
-                            300: '#dec0ae',
-                            500: '#b89278',
-                            600: '#9b745c',
-                            800: '#5c4030',
-                            900: '#332117',
+                            50: '#fdf8f5', 100: '#f7ebe3', 200: '#edd8cb', 300: '#dec0ae',
+                            500: '#b89278', 600: '#9b745c', 800: '#5c4030', 900: '#332117',
                         }
                     }
                 }
@@ -35,26 +26,14 @@
         }
     </script>
     <style>
-        body {
-            background: linear-gradient(135deg, #f7ebe3 0%, #edd8cb 50%, #dec0ae 100%);
-            min-height: 100vh;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-        }
-        .serif-title {
-            font-family: 'Cormorant Garamond', serif;
-        }
+        body { background: linear-gradient(135deg, #f7ebe3 0%, #edd8cb 50%, #dec0ae 100%); min-height: 100vh; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.7); }
+        .serif-title { font-family: 'Cormorant Garamond', serif; }
     </style>
 </head>
 <body class="font-sans antialiased text-gray-800 pb-20">
 
-    <!-- Header / Branding Bereich -->
     <div class="max-w-md mx-auto pt-8 px-4 text-center">
-        
         <div class="relative inline-block mb-3 cursor-pointer select-none" onclick="handleLogoClick()">
             <div class="w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-amber-200 via-nude-500 to-nude-800 mx-auto shadow-xl flex items-center justify-center">
                 <div class="w-full h-full rounded-full bg-nude-50 flex flex-col items-center justify-center overflow-hidden border border-nude-200 p-2">
@@ -78,18 +57,17 @@
             <i class="fa-solid fa-location-dot text-nude-600"></i> Homestudio • Rechtsupweg
         </p>
         
-        <!-- NAVIGATION TABS -->
         <div class="grid grid-cols-4 gap-1.5 glass-card p-1.5 rounded-2xl mb-6 shadow-md border border-nude-200 text-[11px] font-bold">
-            <button id="tab-btn-booking" onclick="switchTab('booking')" class="py-2.5 rounded-xl bg-nude-800 text-amber-50 shadow-sm transition">
+            <button id="tab-btn-booking" onclick="switchTab('booking')" class="tab-btn py-2.5 rounded-xl bg-nude-800 text-amber-50 shadow-sm transition">
                 <i class="fa-regular fa-calendar-check block text-sm mb-0.5"></i> Termine
             </button>
-            <button id="tab-btn-prices" onclick="switchTab('prices')" class="py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition">
+            <button id="tab-btn-prices" onclick="switchTab('prices')" class="tab-btn py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition">
                 <i class="fa-solid fa-gem block text-sm mb-0.5"></i> Preise
             </button>
-            <button id="tab-btn-aftercare" onclick="switchTab('aftercare')" class="py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition">
+            <button id="tab-btn-aftercare" onclick="switchTab('aftercare')" class="tab-btn py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition">
                 <i class="fa-solid fa-heart block text-sm mb-0.5"></i> Pflege
             </button>
-            <button id="tab-btn-faq" onclick="switchTab('faq')" class="py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition">
+            <button id="tab-btn-faq" onclick="switchTab('faq')" class="tab-btn py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition">
                 <i class="fa-regular fa-circle-question block text-sm mb-0.5"></i> Info & FAQ
             </button>
         </div>
@@ -103,8 +81,9 @@
             </button>
         </div>
     </div>
-    <!-- Hauptbereich -->
+
     <main class="max-w-md mx-auto px-4 space-y-5">
+        <!-- TERMINE TAB -->
         <div id="tab-content-booking" class="space-y-4">
             <div class="bg-gradient-to-r from-rose-100 via-amber-50 to-nude-100 p-4 rounded-3xl border-2 border-nude-300 shadow-md text-center relative overflow-hidden">
                 <span class="text-[10px] uppercase tracking-widest font-bold text-nude-600 bg-white/80 px-3 py-1 rounded-full shadow-sm inline-block mb-1">September Special</span>
@@ -147,6 +126,32 @@
 
             <div class="space-y-3.5" id="dates-container"></div>
         </div>
+
+        <!-- PREISE TAB -->
+        <div id="tab-content-prices" class="hidden glass-card p-5 rounded-2xl shadow-md border border-nude-200 text-xs">
+            <h2 class="serif-title text-xl font-bold mb-3 text-nude-900 border-b border-nude-200 pb-2">Preisübersicht</h2>
+            <div class="space-y-2">
+                <div class="flex justify-between py-1"><span>Neumodellage (1:1)</span><span class="font-bold">60 €</span></div>
+                <div class="flex justify-between py-1 border-t border-nude-100"><span>Volumentechnik</span><span class="font-bold">75 €</span></div>
+                <div class="flex justify-between py-1 border-t border-nude-100"><span>Auffüllen (bis 3 Wochen)</span><span class="font-bold">ab 40 €</span></div>
+            </div>
+        </div>
+
+        <!-- PFLEGE TAB -->
+        <div id="tab-content-aftercare" class="hidden glass-card p-5 rounded-2xl shadow-md border border-nude-200 text-xs">
+            <h2 class="serif-title text-xl font-bold mb-3 text-nude-900 border-b border-nude-200 pb-2">Pflegehinweise</h2>
+            <ul class="list-disc pl-4 space-y-2 text-nude-800">
+                <li>Die ersten 24 Stunden Wasserkontakt vermeiden.</li>
+                <li>Keine ölhaltigen Produkte im Augenbereich nutzen.</li>
+                <li>Wimpern täglich vorsichtig bürsten.</li>
+            </ul>
+        </div>
+
+        <!-- FAQ TAB -->
+        <div id="tab-content-faq" class="hidden glass-card p-5 rounded-2xl shadow-md border border-nude-200 text-xs">
+            <h2 class="serif-title text-xl font-bold mb-3 text-nude-900 border-b border-nude-200 pb-2">Info & FAQ</h2>
+            <p class="mb-2"><strong>Wie lange dauert eine Behandlung?</strong><br>Neumodellagen dauern ca. 2 Stunden, Auffüllen ca. 1 bis 1,5 Stunden.</p>
+        </div>
     </main>
 
     <script>
@@ -161,6 +166,8 @@
 
         let slots = [];
         let isAdmin = false;
+        let clickCount = 0;
+        let clickTimer;
         const STORAGE_KEY = "dijana_global_slots_sync_v5";
 
         document.addEventListener('DOMContentLoaded', () => { loadSlots(); });
@@ -182,7 +189,15 @@
         function switchTab(tabName) {
             ['booking', 'prices', 'aftercare', 'faq'].forEach(t => {
                 const el = document.getElementById(`tab-content-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
                 if (el) el.classList.toggle('hidden', t !== tabName);
+                if (btn) {
+                    if (t === tabName) {
+                        btn.className = "tab-btn py-2.5 rounded-xl bg-nude-800 text-amber-50 shadow-sm transition";
+                    } else {
+                        btn.className = "tab-btn py-2.5 rounded-xl text-nude-800 hover:bg-white/60 transition";
+                    }
+                }
             });
         }
 
@@ -194,11 +209,49 @@
             const container = document.getElementById('dates-container');
             if (!container) return;
             container.innerHTML = slots.map(s => `
-                <div class="glass-card p-3 rounded-xl flex justify-between items-center mb-2">
-                    <div><span class="font-bold text-xs">${s.dateStr}</span> - <span class="text-xs">${s.time}</span></div>
-                    <button class="bg-nude-800 text-white text-xs px-3 py-1 rounded-lg">Buchen</button>
+                <div class="glass-card p-3 rounded-xl flex justify-between items-center mb-2 shadow-sm">
+                    <div>
+                        <span class="font-bold text-xs text-nude-900">${s.dateStr}</span> 
+                        <span class="text-xs text-nude-800 border-l border-nude-300 ml-2 pl-2">${s.time}</span>
+                    </div>
+                    <button class="bg-nude-800 text-amber-50 text-xs px-3 py-1.5 rounded-lg hover:bg-nude-900 transition">Buchen</button>
                 </div>
             `).join('');
+        }
+
+        function handleLogoClick() {
+            clickCount++;
+            clearTimeout(clickTimer);
+            if (clickCount >= 5) {
+                const pin = prompt("Admin PIN eingeben:");
+                if (pin === ADMIN_PIN) {
+                    isAdmin = true;
+                    document.getElementById('admin-panel').classList.remove('hidden');
+                    document.getElementById('admin-status-bar').classList.remove('hidden');
+                    document.getElementById('admin-status-bar').classList.add('flex');
+                }
+                clickCount = 0;
+            } else {
+                clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
+            }
+        }
+
+        function exitAdminMode() {
+            isAdmin = false;
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('admin-status-bar').classList.add('hidden');
+            document.getElementById('admin-status-bar').classList.remove('flex');
+        }
+
+        function handleAddSlot(e) {
+            e.preventDefault();
+            const dateStr = document.getElementById('slot-date-str').value;
+            const time = document.getElementById('slot-time').value;
+            const note = document.getElementById('slot-note').value;
+
+            slots.push({ id: Date.now().toString(), dateStr, time, note, booked: false, client: null });
+            saveSlots();
+            document.getElementById('add-slot-form').reset();
         }
     </script>
 </body>
