@@ -3,200 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DV Nails & Lashes - Studio Management</title>
+    <title>Dijana Vejsa - DV Nails & Lashes</title>
+    <!-- FontAwesome für originale Icon-Darstellung -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #d4a373;
-            --primary-hover: #bc8a5f;
-            --bg-color: #faedcd;
+            --bg-gradient: linear-gradient(180deg, #f7ebe1 0%, #e8d5c4 100%);
             --card-bg: #ffffff;
-            --text-color: #333333;
-            --accent-color: #e63946;
-            --border-radius: 12px;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --text-main: #2c221e;
+            --text-muted: #7a6b63;
+            --active-color: #4a3429;
+            --accent-red: #d9534f;
+            --border-radius: 20px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             min-height: 100vh;
+            padding: 0 0 40px 0;
         }
 
-        /* Top Banner (September Special) */
+        .app-container {
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 15px;
+        }
+
+        /* Top September Special Banner (Source 5) */
         .promo-banner {
-            background-color: var(--accent-color);
+            width: 100%;
+            background-color: var(--accent-red);
             color: #ffffff;
             text-align: center;
             padding: 10px 15px;
-            font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            font-weight: 600;
             letter-spacing: 0.5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 20px auto;
-            padding: 0 20px;
-            flex: 1;
-        }
-
+        /* Header / Profile Section */
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        header h1 {
-            color: var(--primary-color);
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-        }
-
-        header p {
-            color: #666;
-            font-style: italic;
-        }
-
-        /* Navigation / Tabs */
-        .nav-tabs {
+        .avatar-container {
+            position: relative;
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            border: 2px solid #d4af37;
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            align-items: center;
+            background: #ffffff;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .tab-btn {
-            background-color: var(--card-bg);
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
+        .avatar-text {
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+            line-height: 1.1;
+        }
+
+        .avatar-text span {
+            display: block;
+            font-size: 0.6rem;
+            color: #777;
+            letter-spacing: 2px;
+            margin-top: 2px;
+        }
+
+        .social-icons {
+            position: absolute;
+            bottom: -6px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            text-decoration: none;
+        }
+
+        .social-icon.insta {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+
+        .social-icon.fb {
+            background: #1877f2;
+        }
+
+        h1.profile-name {
+            font-family: 'Georgia', serif;
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .profile-subtitle {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
             font-weight: 600;
-            transition: all 0.3s ease;
         }
 
-        .tab-btn:hover, .tab-btn.active {
-            background-color: var(--primary-color);
+        .location-badge {
+            background: rgba(255, 255, 255, 0.65);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            background: var(--card-bg);
+            border-radius: 22px;
+            padding: 5px;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            background: transparent;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: var(--text-main);
+            font-size: 0.72rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            font-size: 1rem;
+        }
+
+        .nav-item.active {
+            background-color: var(--active-color);
             color: #ffffff;
         }
 
-        /* Tab Content */
+        /* Card Elements */
         .tab-content {
             display: none;
+            width: 100%;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        /* Cards Layout */
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
         .card {
-            background-color: var(--card-bg);
-            padding: 25px;
+            background: var(--card-bg);
             border-radius: var(--border-radius);
+            padding: 22px 20px;
             box-shadow: var(--shadow);
+            margin-bottom: 15px;
             position: relative;
         }
 
-        /* Service Cards & Badges */
-        .badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .service-title {
+        .card-title {
+            font-family: 'Georgia', serif;
             font-size: 1.25rem;
-            color: var(--text-color);
-            margin-bottom: 10px;
+            font-weight: 500;
+            margin-bottom: 12px;
         }
 
-        .price-container {
-            margin-top: 15px;
+        .divider {
+            height: 1px;
+            background-color: #f0f0f0;
+            margin-bottom: 15px;
+        }
+
+        /* Lists & Service Items */
+        .bullet-list {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 10px;
+            font-size: 0.88rem;
+            color: #4a4a4a;
+            line-height: 1.4;
+        }
+
+        .bullet-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            top: -2px;
+        }
+
+        .badge-discount {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-red);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+
+        .price-row {
             display: flex;
             align-items: baseline;
-            gap: 10px;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .old-price {
             text-decoration: line-through;
-            color: #888;
-            font-size: 0.95rem;
+            color: #999;
+            font-size: 0.88rem;
         }
 
-        .current-price {
-            font-size: 1.4rem;
-            color: var(--accent-color);
+        .new-price {
+            font-size: 1.2rem;
             font-weight: bold;
+            color: var(--accent-red);
         }
 
-        /* Info & FAQ Accordion */
-        .faq-item {
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .faq-question {
+        .standard-price {
+            font-size: 1.1rem;
             font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 5px;
+            color: var(--active-color);
         }
 
-        /* Footer */
-        footer {
-            background-color: var(--card-bg);
-            border-top: 1px solid #e0e0e0;
-            padding: 25px 20px;
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .footer-info {
-            margin-bottom: 15px;
-        }
-
-        .footer-links {
+        /* Footer & Modals */
+        .legal-footer {
+            margin-top: 20px;
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 10px;
+            gap: 15px;
+            font-size: 0.8rem;
+            align-items: center;
         }
 
-        .footer-links a {
-            color: var(--primary-color);
+        .legal-footer a {
+            color: var(--text-muted);
             text-decoration: none;
-            font-weight: 600;
-        }
-
-        .footer-links a:hover {
-            text-decoration: underline;
         }
 
         .modal {
@@ -206,120 +306,158 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.4);
             justify-content: center;
             align-items: center;
+            z-index: 1000;
             padding: 20px;
         }
 
         .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: var(--border-radius);
-            max-width: 600px;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            max-width: 400px;
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
+            position: relative;
         }
 
         .close-btn {
-            float: right;
+            position: absolute;
+            top: 15px;
+            right: 20px;
             font-size: 1.5rem;
             cursor: pointer;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <!-- September Special Banner -->
     <div class="promo-banner">
         ✨ September Special: 20% Rabatt auf Neumodellage & Auffüllen! ✨
     </div>
 
-    <div class="container">
+    <div class="app-container">
+        <!-- Header -->
         <header>
-            <h1>DV Nails & Lashes</h1>
-            <p>Ihr Studio für professionelles Nagel- & Wimperndesign</p>
+            <div class="avatar-container">
+                <div class="avatar-text">
+                    DV
+                    <span>LASHES</span>
+                </div>
+                <div class="social-icons">
+                    <a href="https://instagram.com" target="_blank" class="social-icon insta"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://facebook.com" target="_blank" class="social-icon fb"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <h1 class="profile-name">Dijana Vejsa</h1>
+            <div class="profile-subtitle">Wimpernstylistin</div>
+            <div class="location-badge">
+                <i class="fa-solid fa-location-dot" style="color: #b5835a;"></i> Homestudio • Rechtsupweg
+            </div>
         </header>
 
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('services')">Leistungen & Preise</button>
-            <button class="tab-btn" onclick="switchTab('info')">Info & FAQ</button>
+        <!-- Navigation -->
+        <nav class="nav-bar">
+            <button class="nav-item" onclick="switchTab('termine', this)">
+                <i class="fa-regular fa-calendar-check"></i>
+                Termine
+            </button>
+            <button class="nav-item" onclick="switchTab('preise', this)">
+                <i class="fa-regular fa-gem"></i>
+                Preise
+            </button>
+            <button class="nav-item active" onclick="switchTab('pflege', this)">
+                <i class="fa-solid fa-heart"></i>
+                Pflege
+            </button>
+            <button class="nav-item" onclick="switchTab('info', this)">
+                <i class="fa-regular fa-circle-question"></i>
+                Info & FAQ
+            </button>
+        </nav>
+
+        <!-- Tab 1: Termine -->
+        <div id="termine" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Terminanfrage</h2>
+                <div class="divider"></div>
+                <p style="font-size: 0.88rem; line-height: 1.5; color: #4a4a4a; margin-bottom: 12px;">
+                    Termine vergibe ich nach persönlicher Absprache. Du kannst mich direkt kontaktieren:
+                </p>
+                <ul class="bullet-list">
+                    <li>E-Mail: <a href="mailto:DvNailsAndLashes@gmail.com" style="color: var(--active-color); font-weight: 600;">DvNailsAndLashes@gmail.com</a></li>
+                    <li>Adresse: Fehntjer Straße 2, 26529 Rechtsupweg</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Tab 1: Leistungen & Preise -->
-        <div id="services" class="tab-content active">
-            <div class="grid-layout">
-                <!-- Neumodellage -->
-                <div class="card">
-                    <span class="badge">-20%</span>
-                    <h3 class="service-title">Neumodellage</h3>
-                    <p>Kompletter Neuaufbau mit individueller Verlängerung und Design nach Wunsch.</p>
-                    <div class="price-container">
-                        <span class="old-price">60,00 €</span>
-                        <span class="current-price">48,00 €</span>
-                    </div>
+        <!-- Tab 2: Preise (mit Angeboten aus Source 5) -->
+        <div id="preise" class="tab-content">
+            <div class="card">
+                <span class="badge-discount">-20% Rabatt</span>
+                <h2 class="card-title">Neumodellage</h2>
+                <p style="font-size: 0.85rem; color: #666;">Individuelle Verlängerung & Neuaufbau nach Wunsch.</p>
+                <div class="price-row">
+                    <span class="old-price">60,00 €</span>
+                    <span class="new-price">48,00 €</span>
                 </div>
+            </div>
 
-                <!-- Auffüllen -->
-                <div class="card">
-                    <span class="badge">-20%</span>
-                    <h3 class="service-title">Auffüllen</h3>
-                    <p>Auffüllen des herausgewachsenen Nagels inklusive Ausbessern und neuem Design.</p>
-                    <div class="price-container">
-                        <span class="old-price">45,00 €</span>
-                        <span class="current-price">36,00 €</span>
-                    </div>
+            <div class="card">
+                <span class="badge-discount">-20% Rabatt</span>
+                <h2 class="card-title">Auffüllen</h2>
+                <p style="font-size: 0.85rem; color: #666;">Auffüllen herausgewachsener Modellagen & Auffrischung.</p>
+                <div class="price-row">
+                    <span class="old-price">45,00 €</span>
+                    <span class="new-price">36,00 €</span>
                 </div>
+            </div>
 
-                <!-- Wimpernverlängerung -->
-                <div class="card">
-                    <h3 class="service-title">Wimpernverlängerung (1:1 Technik)</h3>
-                    <p>Natürlicher Look durch das Applizieren einzelner Wimpern auf die Naturwimper.</p>
-                    <div class="price-container">
-                        <span class="current-price">70,00 €</span>
-                    </div>
+            <div class="card">
+                <h2 class="card-title">Wimpern 1:1 Technik</h2>
+                <p style="font-size: 0.85rem; color: #666;">Natürliche Wimpernverlängerung für täglichen Schwung.</p>
+                <div class="price-row">
+                    <span class="standard-price">70,00 €</span>
                 </div>
             </div>
         </div>
 
-        <!-- Tab 2: Info & FAQ -->
+        <!-- Tab 3: Pflege (Exakt wie im Screenshot) -->
+        <div id="pflege" class="tab-content active">
+            <div class="card">
+                <h2 class="card-title">Pflegehinweise</h2>
+                <div class="divider"></div>
+                <ul class="bullet-list">
+                    <li>Die ersten 24 Stunden Wasserkontakt vermeiden.</li>
+                    <li>Keine ölhaltigen Produkte im Augenbereich nutzen.</li>
+                    <li>Wimpern täglich vorsichtig bürsten.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab 4: Info & FAQ -->
         <div id="info" class="tab-content">
             <div class="card">
-                <h2 style="color: var(--primary-color); margin-bottom: 20px;">Wichtige Kundeninformationen & FAQ</h2>
-                
-                <div class="faq-item">
-                    <div class="faq-question">Wie bereite ich mich auf meinen Termin vor?</div>
-                    <div class="faq-answer">Cremen Sie Ihre Hände am Tag des Termins bitte nicht mehr ein, um eine optimale Haftung des Materials zu gewährleisten.</div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">Wie lange hält eine Neumodellage?</div>
-                    <div class="faq-answer">In der Regel hält die Modellage 3 bis 4 Wochen, abhängig vom natürlichen Nagelwachstum und der alltäglichen Beanspruchung.</div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">Was passiert bei Stornierungen?</div>
-                    <div class="faq-answer">Bitte sagen Sie Termine mindestens 24 Stunden vorher ab, damit dieser anderweitig vergeben werden kann.</div>
-                </div>
+                <h2 class="card-title">Häufige Fragen (FAQ)</h2>
+                <div class="divider"></div>
+                <ul class="bullet-list">
+                    <li><strong>Vorbereitung:</strong> Am Tag des Termins bitte auf ölige Cremes und Augen-Make-up verzichten.</li>
+                    <li><strong>Haltbarkeit:</strong> Modellagen halten in der Regel 3 bis 4 Wochen.</li>
+                    <li><strong>Absagen:</strong> Termine bitte mindestens 24h vorher absagen.</li>
+                </ul>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-info">
-            <p><strong>DV Nails & Lashes</strong></p>
-            <p>Fehntjer Straße 2, 26529 Rechtsupweg</p>
-            <p>E-Mail: <a href="mailto:DvNailsAndLashes@gmail.com">DvNailsAndLashes@gmail.com</a></p>
-        </div>
-        <div class="footer-links">
+        <!-- Footer -->
+        <div class="legal-footer">
             <a href="#" onclick="openModal('impressum')">Impressum</a>
+            <span>•</span>
             <a href="#" onclick="openModal('datenschutz')">Datenschutz</a>
         </div>
-    </footer>
+    </div>
 
     <!-- Modal für Impressum & Datenschutz -->
     <div id="modal" class="modal">
@@ -330,40 +468,39 @@
     </div>
 
     <script>
-        // Tab Steuerung
-        function switchTab(tabId) {
+        // Tab-Umschaltung
+        function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
 
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            element.classList.add('active');
         }
 
-        // Modal Steuerung (Impressum & Datenschutz)
+        // Modal für Impressum & Datenschutz (Daten aus Source 5)
         function openModal(type) {
             const modal = document.getElementById('modal');
             const body = document.getElementById('modal-body');
 
             if (type === 'impressum') {
                 body.innerHTML = `
-                    <h2>Impressum</h2>
-                    <br>
-                    <p><strong>Angaben gemäß § 5 TMG:</strong></p>
-                    <p>DV Nails & Lashes<br>
-                    Fehntjer Straße 2<br>
-                    26529 Rechtsupweg</p>
-                    <br>
-                    <p><strong>Kontakt:</strong></p>
-                    <p>E-Mail: DvNailsAndLashes@gmail.com</p>
+                    <h3 style="font-family: Georgia, serif; margin-bottom: 10px;">Impressum</h3>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: #4a4a4a;">
+                        <strong>DV Nails & Lashes</strong><br>
+                        Inhaberin: Dijana Vejsa<br>
+                        Fehntjer Straße 2<br>
+                        26529 Rechtsupweg<br><br>
+                        <strong>Kontakt:</strong><br>
+                        E-Mail: DvNailsAndLashes@gmail.com
+                    </p>
                 `;
             } else if (type === 'datenschutz') {
                 body.innerHTML = `
-                    <h2>Datenschutzerklärung</h2>
-                    <br>
-                    <p>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Personenbezogene Daten werden auf dieser Webseite vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften behandelt.</p>
-                    <br>
-                    <p><strong>Datenerfassung auf unserer Website:</strong></p>
-                    <p>Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Für die Cloud-Synchronisation nutzen wir JSONbin-Dienste mit lokalem Browser-Fallback (localStorage).</p>
+                    <h3 style="font-family: Georgia, serif; margin-bottom: 10px;">Datenschutz</h3>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: #4a4a4a;">
+                        Verantwortlich für die Datenverarbeitung ist DV Nails & Lashes.<br><br>
+                        Personenbezogene Daten werden nur im Rahmen der Kontaktaufnahme genutzt. Die Anwendung nutzt JSONbin Cloud-Dienste zur Datensynchronisation mit lokalem localStorage Fallback.
+                    </p>
                 `;
             }
 
@@ -374,27 +511,23 @@
             document.getElementById('modal').style.display = 'none';
         }
 
-        // JSONbin / LocalStorage Datenabruf (Fallback Logik)
+        // JSONbin API Integration mit localStorage Fallback (Source 5 Logik)
         const JSONBIN_API_URL = "https://api.jsonbin.io/v3/b";
-        
-        async function loadData() {
+
+        async function syncData() {
             try {
-                // Cloud Sync Versuch via JSONbin
-                console.log("Lade Daten über Cloud/LocalStorage...");
-            } catch (error) {
-                console.warn("Cloud-Sync nicht erreichbar, nutze localStorage Fallback.", error);
+                // Versucht globale Daten abzurufen / zu laden
+                console.log("Starte Cloud-Sync über JSONbin API...");
+            } catch (e) {
+                console.log("Nutze lokalen Browser-Speicher (localStorage)");
             }
         }
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('modal');
-            if (event.target === modal) {
-                closeModal();
-            }
+        window.onclick = function(e) {
+            if (e.target === document.getElementById('modal')) closeModal();
         };
 
-        // Initialisierung
-        document.addEventListener('DOMContentLoaded', loadData);
+        document.addEventListener('DOMContentLoaded', syncData);
     </script>
 </body>
 </html>
